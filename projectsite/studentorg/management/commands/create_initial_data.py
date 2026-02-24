@@ -1,14 +1,16 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
-from studentorg.models import College, Program, Organization, Student, OrgMember
+from studentorg.models import College, Program, Organization, Student, Member
 
 class Command(BaseCommand):
     help = 'Create initial data for the application'
 
     def handle(self, *args, **kwargs):
-        self.create_organization(10)
-        self.create_students(50)
-        self.create_membership(10)
+        self.create_colleges()  # Run this first
+        self.create_programs()  # Run this second
+        self.create_students(50) # Now students can be created
+        self.stdout.write(self.style.SUCCESS('Initial data created successfully.'))
+
 
     def create_organization(self, count):
         fake = Faker()
@@ -37,9 +39,22 @@ class Command(BaseCommand):
     def create_membership(self, count):
         fake = Faker()
         for _ in range(count):
-            OrgMember.objects.create(
+            Member.objects.create(
                 student=Student.objects.order_by('?').first(),
                 organization=Organization.objects.order_by('?').first(),
                 date_joined=fake.date_between(start_date="-2y", end_date="today")
             )
         self.stdout.write(self.style.SUCCESS('Initial data for student organization created successfully.'))
+
+    def create_colleges(self):
+        colleges = ["College of Science", "College of Arts", "College of Engineering", "College of Education"]
+        for name in colleges:
+            College.objects.get_or_create(college_name=name)
+        self.stdout.write(self.style.SUCCESS('Colleges created successfully.'))
+
+    def create_programs(self):
+        college = College.objects.first()
+        programs = ["BSIT", "BSCS", "BSIS", "BSEMC"]
+        for name in programs:
+            Program.objects.get_or_create(prog_name=name, college=college)
+        self.stdout.write(self.style.SUCCESS('Programs created successfully.'))

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import College, Program, Organization, Student, OrgMember
+from .models import College, Program, Organization, Student, Member
 
 
 @admin.register(College)
@@ -29,8 +29,8 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ("lastname", "firstname",)
 
 
-@admin.register(OrgMember)
-class OrgMemberAdmin(admin.ModelAdmin):
+@admin.register(Member)
+class MemberAdmin(admin.ModelAdmin):
     list_display = ("student", "get_member_program", "organization", "date_joined",)
     search_fields = ("student__lastname", "student__firstname",)
 
