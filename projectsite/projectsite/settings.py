@@ -119,6 +119,19 @@ ACCOUNT_SIGNUP_FIELDS = [
 "password2*",
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'user:email',
+            'read:user',
+        ],
+    }
+}
+
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create the user profile
+ACCOUNT_EMAIL_REQUIRED = False     # Don't force them to have an email
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
